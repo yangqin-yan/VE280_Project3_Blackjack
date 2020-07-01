@@ -71,11 +71,11 @@ int main(int argc, char* argv[]){
             cout << "Player dealt " << SpotNames[deal.spot] << " of "
             << SuitNames[deal.suit] << endl;
 
-            dealer_hand = d.deal();
-            d_hand.addCard(dealer_hand);
-            player->expose(dealer_hand);
-            cout << "Dealer dealt " << SpotNames[dealer_hand.spot] << " of "
-                 << SuitNames[dealer_hand.suit] << endl;
+            deal = d.deal();
+            d_hand.addCard(deal);
+            player->expose(deal);
+            cout << "Dealer dealt " << SpotNames[deal.spot] << " of "
+                 << SuitNames[deal.suit] << endl;
 
             deal = d.deal();
             p_hand.addCard(deal);
@@ -83,8 +83,12 @@ int main(int argc, char* argv[]){
             cout << "Player dealt " << SpotNames[deal.spot] << " of "
                  << SuitNames[deal.suit] << endl;
 
-            deal = d.deal();
-            d_hand.addCard(deal);
+
+            dealer_hand = d.deal();
+            d_hand.addCard(dealer_hand);
+
+
+
 
             // Judgement.
             if(p_hand.handValue().count == 21){
@@ -97,6 +101,8 @@ int main(int argc, char* argv[]){
                     deal = d.deal();
                     p_hand.addCard(deal);
                     player->expose(deal);
+                    cout << "Player dealt " << SpotNames[dealer_hand.spot]
+                    << " of " << SuitNames[dealer_hand.suit] << endl;
                 }
                 int player_count = p_hand.handValue().count;
                 cout << "Player's total is " << player_count << endl;
@@ -109,15 +115,15 @@ int main(int argc, char* argv[]){
                 else{
                     // announce the dealer's hole card
                     player->expose(dealer_hand);
-                    cout << "Dealer's hole card is" << SpotNames[dealer_hand.spot]
+                    cout << "Dealer's hole card is " << SpotNames[dealer_hand.spot]
                     << " of " << SuitNames[dealer_hand.suit] << endl;
                     // play the dealer's hand.
                     while(d_hand.handValue().count < 17){
                         deal = d.deal();
                         d_hand.addCard(deal);
                         player->expose(deal);
-                        cout << "Dealer dealt" << SpotNames[dealer_hand.spot]
-                        << " of " << SuitNames[dealer_hand.suit] << endl;
+                        cout << "Dealer dealt " << SpotNames[deal.spot]
+                        << " of " << SuitNames[deal.suit] << endl;
                     }
                     int dealer_count = d_hand.handValue().count;
                     cout << "Dealer's total is " << dealer_count << endl;
