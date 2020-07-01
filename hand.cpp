@@ -17,7 +17,7 @@ curValue{0, false}{
 
 void Hand::discardAll(){
     curValue.count = 0;
-    curValue.soft = true;
+    curValue.soft = false;
 }
 // MODIFIES: this
 // EFFECTS: discards any cards presently held, restoring the state
@@ -40,7 +40,7 @@ void Hand::addCard(Card c){
         }
     }
     else{
-        curValue.count += c.spot;
+        curValue.count += c.spot + 2;
     }
 
     // Overflow because of soft ace.

@@ -15,12 +15,12 @@ static const int MINIMUM = 5; // minimum bet is 5.
 // MODIFIES: deck.
 // REQUIRES: the address of deck.
 void deck_shuffle(Deck & d){
+    cout << "Shuffling the deck\n";
     for(int i = 0; i < 7; i++){
         int cut = get_cut();
         d.shuffle(cut);
         cout << "cut at " << cut << endl;
     }
-    cout << "Shuffling the deck\n";
 }
 
 int main(int argc, char* argv[]){
@@ -107,10 +107,17 @@ int main(int argc, char* argv[]){
                     continue;
                 }
                 else{
+                    // announce the dealer's hole card
+                    player->expose(dealer_hand);
+                    cout << "Dealer's hole card is" << SpotNames[dealer_hand.spot]
+                    << " of " << SuitNames[dealer_hand.suit] << endl;
                     // play the dealer's hand.
                     while(d_hand.handValue().count < 17){
                         deal = d.deal();
                         d_hand.addCard(deal);
+                        player->expose(deal);
+                        cout << "Dealer dealt" << SpotNames[dealer_hand.spot]
+                        << " of " << SuitNames[dealer_hand.suit] << endl;
                     }
                     int dealer_count = d_hand.handValue().count;
                     cout << "Dealer's total is " << dealer_count << endl;

@@ -178,7 +178,7 @@ Card Deck::deal(){
         if(next == DeckSize){
             // Debugs
             cerr << "Error: Move until the end of deck!";
-            throw 1;
+            throw -1;
         }
     }
     catch(int n){
