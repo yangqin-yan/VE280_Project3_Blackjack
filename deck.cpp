@@ -14,22 +14,22 @@ using namespace std;
 // EFFECTS: constructs a "newly opened" deck of cards.  first the
 // spades from 2-A, then the hearts, then the clubs, then the
 // diamonds.  The first card dealt should be the 2 of Spades.
-Deck::Deck(): deck{TWO, SPADES, THREE, SPADES, FOUR, SPADES, FIVE, SPADES,
-                   SIX, SPADES, SEVEN, SPADES, EIGHT, SPADES, NINE, SPADES,
-                   TEN, SPADES, JACK, SPADES, QUEEN, SPADES, KING, SPADES,
-                   ACE, SPADES,
-                   TWO, HEARTS, THREE, HEARTS, FOUR, HEARTS, FIVE, HEARTS,
-                   SIX, HEARTS, SEVEN, HEARTS, EIGHT, HEARTS, NINE, HEARTS,
-                   TEN, HEARTS, JACK, HEARTS, QUEEN, HEARTS, KING, HEARTS,
-                   ACE, HEARTS,
-                   TWO, CLUBS, THREE, CLUBS, FOUR, CLUBS, FIVE, CLUBS,
-                   SIX, CLUBS, SEVEN, CLUBS, EIGHT, CLUBS, NINE, CLUBS,
-                   TEN, CLUBS, JACK, CLUBS, QUEEN, CLUBS, KING, CLUBS,
-                   ACE, CLUBS,
-                   TWO, DIAMONDS, THREE, DIAMONDS, FOUR, DIAMONDS, FIVE, DIAMONDS,
-                   SIX, DIAMONDS, SEVEN, DIAMONDS, EIGHT, DIAMONDS, NINE, DIAMONDS,
-                   TEN, DIAMONDS, JACK, DIAMONDS, QUEEN, DIAMONDS, KING, DIAMONDS,
-                   ACE, DIAMONDS,}, next(0)
+Deck::Deck(): deck{{TWO, SPADES}, {THREE, SPADES}, {FOUR, SPADES}, {FIVE, SPADES},
+                   {SIX, SPADES}, {SEVEN, SPADES}, {EIGHT, SPADES}, {NINE, SPADES},
+                   {TEN, SPADES}, {JACK, SPADES}, {QUEEN, SPADES}, {KING, SPADES},
+                   {ACE, SPADES},
+                   {TWO, HEARTS}, {THREE, HEARTS}, {FOUR, HEARTS}, {FIVE, HEARTS},
+                   {SIX, HEARTS}, {SEVEN, HEARTS}, {EIGHT, HEARTS}, {NINE, HEARTS},
+                   {TEN, HEARTS}, {JACK, HEARTS}, {QUEEN, HEARTS}, {KING, HEARTS},
+                   {ACE, HEARTS},
+                   {TWO, CLUBS}, {THREE, CLUBS}, {FOUR, CLUBS}, {FIVE, CLUBS},
+                   {SIX, CLUBS}, {SEVEN, CLUBS}, {EIGHT, CLUBS}, {NINE, CLUBS},
+                   {TEN, CLUBS}, {JACK, CLUBS}, {QUEEN, CLUBS}, {KING, CLUBS},
+                   {ACE, CLUBS},
+                   {TWO, DIAMONDS}, {THREE, DIAMONDS}, {FOUR, DIAMONDS}, {FIVE, DIAMONDS},
+                   {SIX, DIAMONDS}, {SEVEN, DIAMONDS}, {EIGHT, DIAMONDS}, {NINE, DIAMONDS},
+                   {TEN, DIAMONDS}, {JACK, DIAMONDS}, {QUEEN, DIAMONDS}, {KING, DIAMONDS},
+                   {ACE, DIAMONDS}}, next(0)
 {
     // Test
     assert(cout << SuitNames[deck[next].suit] << " " << SpotNames[deck[next].spot] << endl);
@@ -170,6 +170,8 @@ void Deck::shuffle(int n){
     }*/
 }
 
+class DecksizeOverflow{};
+
 // MODIFIES: this
 // EFFECTS: returns the next card to be dealt.  If no cards
 // remain, throws an instance of DeckEmpty.s
@@ -178,11 +180,11 @@ Card Deck::deal(){
         if(next == DeckSize){
             // Debugs
             cerr << "Error: Move until the end of deck!";
-            throw -1;
+            throw DecksizeOverflow{};
         }
     }
-    catch(int n){
-        exit(-1);
+    catch(DecksizeOverflow d){
+        return deck[DeckSize - 1];
     }
     next++;
     return deck[next - 1];
