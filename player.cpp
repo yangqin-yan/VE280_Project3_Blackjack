@@ -55,7 +55,7 @@ bool Simple_Player::draw(Card dealer,             // Dealer's "up card"
         dealer.spot != FIVE && dealer.spot != SIX)){
             return true;
         }
-        else if(player.handValue().count <= 16 && dealer.spot >= 7){
+        else if(player.handValue().count <= 16 && dealer.spot >= SEVEN){
             return true;
         }
         // 17 or greater
