@@ -6,6 +6,7 @@
 #include "deck.h"
 #include "rand.h"
 #include <iostream>
+#include <cassert>
 
 using namespace std;
 
@@ -23,29 +24,11 @@ void deck_shuffle(Deck & d){
     }
 }
 
-int main(int argc, char* argv[]){
-
-    string str;
-    Hand p_hand, d_hand;
-    Player *player = nullptr;
-    str = argv[1]; // input bankroll
-    int bankroll = atoi(str.c_str());
-    str = argv[2];
-    int max_num_hands = atoi(str.c_str());
-    str = argv[3];
-    if(str == "simple"){
-        player = get_Simple();
-    }
-    if(str == "counting"){
-        player = get_Counting();
-    }
-
-    // First shuffle the deck.
-    Deck d;
-    deck_shuffle(d);
-
-    int thishand = 0;
-
+// EFFECTS: drive the game.
+// MODIFIES: bankroll, player, p_hand, d_hand, thishand, d.
+// REQUIRES: 1 <= bankroll <= 10000.
+void driver(int & bankroll, Player * player, const int & max_num_hands, Hand & p_hand, Hand & d_hand, int & thishand,
+        Deck & d){
     if(bankroll >= MINIMUM){
         while(bankroll >= MINIMUM && thishand < max_num_hands){
             thishand++;
@@ -68,29 +51,20 @@ int main(int argc, char* argv[]){
             deal = d.deal();
             p_hand.addCard(deal);
             player->expose(deal);
-            cout << "Player dealt " << SpotNames[deal.spot] << " of "
-            << SuitNames[deal.suit] << endl;
+            cout << "Player dealt " << SpotNames[deal.spot] << " of " << SuitNames[deal.suit] << endl;
 
             deal = d.deal();
             d_hand.addCard(deal);
             player->expose(deal);
-            cout << "Dealer dealt " << SpotNames[deal.spot] << " of "
-                 << SuitNames[deal.suit] << endl;
+            cout << "Dealer dealt " << SpotNames[deal.spot] << " of " << SuitNames[deal.suit] << endl;
 
             deal = d.deal();
             p_hand.addCard(deal);
             player->expose(deal);
-            cout << "Player dealt " << SpotNames[deal.spot] << " of "
-                 << SuitNames[deal.suit] << endl;
-
+            cout << "Player dealt " << SpotNames[deal.spot] << " of " << SuitNames[deal.suit] << endl;
 
             dealer_hand = d.deal();
-            d_hand.addCard(dealer_hand);
-
-
-
-
-            // Judgement.
+            d_hand.addCard(dealer_hand); // Judgement.
             if(p_hand.handValue().count == 21){
                 bankroll += wager * 3 / 2;
                 cout << "Player dealt natural 21\n";
@@ -101,8 +75,7 @@ int main(int argc, char* argv[]){
                     deal = d.deal();
                     p_hand.addCard(deal);
                     player->expose(deal);
-                    cout << "Player dealt " << SpotNames[dealer_hand.spot]
-                    << " of " << SuitNames[dealer_hand.suit] << endl;
+                    cout << "Player dealt " << SpotNames[dealer_hand.spot] << " of " << SuitNames[dealer_hand.suit] << endl;
                 }
                 int player_count = p_hand.handValue().count;
                 cout << "Player's total is " << player_count << endl;
@@ -115,15 +88,13 @@ int main(int argc, char* argv[]){
                 else{
                     // announce the dealer's hole card
                     player->expose(dealer_hand);
-                    cout << "Dealer's hole card is " << SpotNames[dealer_hand.spot]
-                    << " of " << SuitNames[dealer_hand.suit] << endl;
+                    cout << "Dealer's hole card is " << SpotNames[dealer_hand.spot] << " of " << SuitNames[dealer_hand.suit] << endl;
                     // play the dealer's hand.
                     while(d_hand.handValue().count < 17){
                         deal = d.deal();
                         d_hand.addCard(deal);
                         player->expose(deal);
-                        cout << "Dealer dealt " << SpotNames[deal.spot]
-                        << " of " << SuitNames[deal.suit] << endl;
+                        cout << "Dealer dealt " << SpotNames[deal.spot] << " of " << SuitNames[deal.suit] << endl;
                     }
                     int dealer_count = d_hand.handValue().count;
                     cout << "Dealer's total is " << dealer_count << endl;
@@ -152,6 +123,27 @@ int main(int argc, char* argv[]){
             }
         }
     }
+}
+
+int main(int argc, char* argv[]){
+    string str;
+    Hand p_hand, d_hand;
+    Player *player = nullptr;
+    str = argv[1]; // input bankroll
+    int bankroll = atoi(str.c_str());
+    str = argv[2];
+    int max_num_hands = atoi(str.c_str());
+    str = argv[3];
+    if(str == "simple")
+        player = get_Simple();
+    if(str == "counting")
+        player = get_Counting();
+    // First shuffle the deck.
+    Deck d;
+    deck_shuffle(d);
+    int thishand = 0;
+
+    driver(bankroll, player, max_num_hands, p_hand, d_hand, thishand, d);
 
     cout << "Player has " << bankroll
     << " after " << thishand << " hands\n";

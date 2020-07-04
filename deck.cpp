@@ -176,16 +176,6 @@ class DecksizeOverflow{};
 // EFFECTS: returns the next card to be dealt.  If no cards
 // remain, throws an instance of DeckEmpty.s
 Card Deck::deal(){
-    try{
-        if(next == DeckSize){
-            // Debugs
-            cerr << "Error: Move until the end of deck!";
-            throw DecksizeOverflow{};
-        }
-    }
-    catch(DecksizeOverflow d){
-        return deck[DeckSize - 1];
-    }
     next++;
     return deck[next - 1];
 }
